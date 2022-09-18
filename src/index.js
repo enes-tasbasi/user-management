@@ -15,18 +15,6 @@ Requirements
   API Key: 7afa46f2e91768e7eeeb9001ce40de19
 */
 
-const express = require("express");
-const app = express();
-
-app.get("/", (req, res) => {
-  console.log('triggering  "/" endpoint...');
-
-  // define company name
-  let companyName = "RentRedi";
-  console.log("companyName = ", companyName);
-
-  // send response
-  res.send(`Welcome to the ${companyName} interview!`);
-});
+const app = require("./server");
 
 app.listen(8080);
