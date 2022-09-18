@@ -14,6 +14,8 @@ Requirements
 
   API Key: 7afa46f2e91768e7eeeb9001ce40de19
 */
+require("dotenv").config();
+require("./config/firebaseConfig");
 
 const app = require("./server");
 

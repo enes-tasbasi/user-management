@@ -1,5 +1,10 @@
 const express = require("express");
+
+const register = require("./users/routes");
+
 const app = express();
+
+app.use(express.json()); // for parsing application/json
 
 app.get("/", (req, res) => {
   console.log('triggering  "/" endpoint...');
@@ -11,5 +16,7 @@ app.get("/", (req, res) => {
   // send response
   res.send(`Welcome to the ${companyName} interview!`);
 });
+
+register(app);
 
 module.exports = app;
