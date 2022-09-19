@@ -7,21 +7,24 @@ const db = getDatabase();
 
 const getLocationDataByZip = async (zip) => {
   const response = await apiInstance({
-    url: "/zip",
+    url: "/weather",
     params: {
       zip,
     },
   });
 
-  const { lat, lon } = response.data;
-  return { lat, lon };
+  const {
+    coord: { lat, lon },
+    timezone,
+  } = response.data;
+  return { lat, lon, timezone };
 };
 
 const createUser = async (req, res) => {
   const { name, zip } = req.body;
 
   try {
-    const { lat, lon } = await getLocationDataByZip(zip);
+    const { lat, lon, timezone } = await getLocationDataByZip(zip);
 
     const id = uuid();
     const user = {
@@ -30,6 +33,7 @@ const createUser = async (req, res) => {
       zip,
       lat,
       lon,
+      timezone,
     };
 
     set(ref(db, "users/" + id), user);
@@ -67,32 +71,33 @@ const updateUser = async (req, res) => {
 
   const zipUpdated = (user) => body.zip && user.zip !== body.zip;
 
-  const 
+  const updateAttributes = async (user) => {
+    const updated = {
+      ...user,
+    };
+
+    if (zipUpdated(user)) {
+      const { lat, lon, timezone } = await getLocationDataByZip(body.zip);
+      Object.assign(updated, { lat, lon, timezone });
+    }
+
+    if (body.name) {
+      updated.name = body.name;
+    }
+    if (body.zip) {
+      updated.zip = body.zip;
+    }
+
+    set(ref(db, "users/" + id), updated);
+
+    return res.json(updated);
+  };
 
   const dbRef = ref(db);
   try {
     const user = await get(child(dbRef, `users/${id}`));
     if (user.exists()) {
-      const userData = user.val();
-      const updated = {
-        ...userData,
-      };
-
-      if (zipUpdated(userData)) {
-        const { lat, lon } = await getLocationDataByZip(body.zip);
-        Object.assign(updated, { lat, lon });
-      }
-
-      if (body.name) {
-        updated.name = body.name;
-      }
-      if (body.zip) {
-        updated.zip = body.zip;
-      }
-
-      set(ref(db, "users/" + id), updated);
-
-      return res.json(updated);
+      return await updateAttributes(user.val());
     } else {
       res.status(404);
       return res.json({

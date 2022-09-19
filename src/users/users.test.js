@@ -30,11 +30,11 @@ describe("users", () => {
     it("should create a new user", async () => {
       axiosConfig.apiInstance.mockReturnValue({
         data: {
-          zip: "90210",
-          name: "Beverly Hills",
-          lat: 34.0901,
-          lon: -118.4065,
-          country: "US",
+          timezone: 1200,
+          coord: {
+            lat: 34.0901,
+            lon: -118.4065,
+          },
         },
       });
 
@@ -46,6 +46,7 @@ describe("users", () => {
         id: "abc-123",
         name: "John Doe",
         zip: 90210,
+        timezone: 1200,
         lat: 34.0901,
         lon: -118.4065,
       };
@@ -89,11 +90,11 @@ describe("users", () => {
 
       const newLocation = {
         data: {
-          zip: 54321,
-          name: "New York City",
-          lat: 52.0901,
-          lon: -13.4065,
-          country: "US",
+          coord: {
+            lat: 52.0901,
+            lon: -13.4065,
+          },
+          timezone: 9000,
         },
       };
 
@@ -114,8 +115,9 @@ describe("users", () => {
         id: user.id,
         name: "Updated John Doe",
         zip: 54321,
-        lat: newLocation.data.lat,
-        lon: newLocation.data.lon,
+        lat: newLocation.data.coord.lat,
+        lon: newLocation.data.coord.lon,
+        timezone: newLocation.data.timezone,
       };
       expect(body).toStrictEqual(want);
     });
