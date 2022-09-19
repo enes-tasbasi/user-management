@@ -1,7 +1,10 @@
 require("dotenv").config();
+const supertest = require("supertest");
+
 const app = require("./server");
 
-const supertest = require("supertest");
+jest.mock("firebase/database");
+
 const request = supertest(app);
 
 describe("server", () => {

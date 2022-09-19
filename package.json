@@ -18,7 +18,19 @@
   "devDependencies": {
     "jest": "^29.0.3",
     "nodemon": "2.0.12",
+    "nyc": "^15.1.0",
     "supertest": "^6.2.4"
   },
-  "keywords": []
+  "keywords": [],
+  "nyc": {
+    "all": true,
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "exclude": [
+      "coverage/**",
+      "**/*.test.js"
+    ]
+  }
 }

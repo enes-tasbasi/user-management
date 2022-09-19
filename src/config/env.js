@@ -1,10 +1,4 @@
-const isEmpty = (value) => {
-  if (value === undefined || value === null) return true;
-
-  if (value.length === 0) return true;
-
-  return false;
-};
+const { isEmpty } = require("../utils");
 
 const env = (key) => {
   const value = process.env[key];

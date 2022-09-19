@@ -1,6 +1,6 @@
 const express = require("express");
 
-const register = require("./users/routes");
+const registerUserRoutes = require("./users/routes");
 
 const app = express();
 
@@ -17,6 +17,6 @@ app.get("/", (req, res) => {
   res.send(`Welcome to the ${companyName} interview!`);
 });
 
-register(app);
+registerUserRoutes(app);
 
 module.exports = app;
