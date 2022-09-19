@@ -14,6 +14,7 @@ firebase.getDatabase = jest.fn();
 firebase.set = jest.fn();
 firebase.get = jest.fn();
 firebase.child = jest.fn();
+firebase.remove = jest.fn();
 
 uuid.v4.mockReturnValue("abc-123");
 
@@ -120,6 +121,14 @@ describe("users", () => {
         timezone: newLocation.data.timezone,
       };
       expect(body).toStrictEqual(want);
+    });
+  });
+
+  describe("DELETE /", () => {
+    it("should delete a user", async () => {
+      await request
+        .delete("/users/4dd69a2c-666a-41f4-895f-5ac9339f62de")
+        .expect(200);
     });
   });
 });

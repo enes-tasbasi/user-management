@@ -1,4 +1,11 @@
-const { getDatabase, ref, set, get, child } = require("firebase/database");
+const {
+  getDatabase,
+  ref,
+  set,
+  get,
+  child,
+  remove,
+} = require("firebase/database");
 const { v4: uuid } = require("uuid");
 
 const { apiInstance } = require("../config/axiosConfig");
@@ -112,4 +119,19 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, findAll, updateUser };
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    remove(ref(db, "users/" + id));
+    res.status(200);
+    res.json({});
+  } catch (err) {
+    res.status(500);
+    res.json({
+      error: `unable to delte user: ${err.message}`,
+    });
+  }
+};
+
+module.exports = { createUser, findAll, updateUser, deleteUser };
